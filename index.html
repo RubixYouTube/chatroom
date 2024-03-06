@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <style>
+    .container {
+      text-align: center;
+    }
+
+    #chatPage {
+      text-align: left;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome</h1>
+    <input type="text" id="usernameInput" placeholder="Username">
+    <button id="setUsernameBtn">Set Username</button>
+    <hr>
+    <h2>Rooms: <span id="roomCount">0</span></h2>
+    <p id="roomList">Available Rooms:</p>
+    <p id="userOnlineCount">User Online: <span id="userCount">0</span></p>
+    <input type="text" id="roomNameInput" placeholder="Room Name">
+    <button id="createRoomBtn">Create Room</button>
+    <button id="goBtn">Go!</button>
+    <p id="noRoomsText" style="display: none;">No rooms</p>
+    <p id="invalidRoomText" style="display: none; color: red;">Invalid Room</p>
+    <p id="noBlankNameText" style="display: none; color: red;">No blank name</p>
+  </div>
+
+  <div id="chatPage" style="display: none;">
+    <h2>Users online: <span id="userOnlineCount">(useronline)</span></h2>
+    <textarea id="chatTextArea" readonly rows="10" cols="100"></textarea>
+    <input type="text" id="messageInput" placeholder="send things..">
+    <button id="sendBtn">Send</button>
+    <button id="leaveBtn">Leave</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var username = "";
+      var rooms = []; // Empty array to store room names
+
+      // Set initial room count
+      document.getElementById("roomCount").textContent = rooms.length;
+
+      // Update room list
+      function updateRoomList() {
+        var roomListElement = document.getElementById("roomList");
+        roomListElement.innerHTML = "Available Rooms:";
+        rooms.forEach(function(room) {
+          var roomListItem = document.createElement("p");
+          roomListItem.textContent = room;
+          roomListElement.appendChild(roomListItem);
+        });
+      }
+
+      // Set username button click event
+      document.getElementById("setUsernameBtn").addEventListener("click", function() {
+        username = document.getElementById("usernameInput").value.trim();
+        if (username !== "") {
+          alert("Username set to: " + username);
+        } else {
+          alert("Please enter a username.");
+        }
+      });
+
+      // Create room button click event
+      document.getElementById("createRoomBtn").addEventListener("click", function() {
+        var roomName = document.getElementById("roomNameInput").value.trim();
+        if (roomName !== "") {
+          // Redirect to chat page with room name parameter
+          window.location.href = "chat.html?room=" + roomName;
+        } else {
+          // If room name is blank, show "No blank name" message
+          document.getElementById("noBlankNameText").style.display = "block";
+          setTimeout(function() {
+            document.getElementById("noBlankNameText").style.display = "none";
+          }, 500);
+        }
+      });
+
+      // Go button click event
+      document.getElementById("goBtn").addEventListener("click", function() {
+        var roomName = document.getElementById("roomNameInput").value.trim();
+        // Check if the entered room name matches any existing room
+        if (rooms.includes(roomName)) {
+          // If room exists, navigate to the room
+          document.getElementById("chatPage").style.display = "block";
+          document.getElementById("noRoomsText").style.display = "none";
+          document.getElementById("container").style.display = "none";
+        } else {
+          // If room doesn't exist, show "Invalid Room" message
+          document.getElementById("invalidRoomText").style.display = "block";
+          setTimeout(function() {
+            document.getElementById("invalidRoomText").style.display = "none";
+          }, 500);
+        }
+      });
+
+      // Send button click event
+      document.getElementById("sendBtn").addEventListener("click", function() {
+        var message = document.getElementById("messageInput").value.trim();
+        if (message !== "") {
+          var chatTextArea = document.getElementById("chatTextArea");
+          chatTextArea.value += "<" + username + ">: " + message + "\n";
+          document.getElementById("messageInput").value = "";
+        } else {
+          alert("Please enter a message to send.");
+        }
+      });
+
+      // Leave button click event
+      document.getElementById("leaveBtn").addEventListener("click", function() {
+        window.location.href = "main.html"; // Replace with main page URL
+      });
+    });
+  </script>
+</body>
+</html>
