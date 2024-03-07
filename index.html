@@ -43,6 +43,10 @@
       document.getElementById("createRoomBtn").addEventListener("click", function() {
         var roomName = document.getElementById("roomNameInput").value.trim();
         if (roomName !== "") {
+          // Clear website screen and go to chat
+          document.getElementById("chatPage").style.display = "block";
+          document.getElementById("noRoomsText").style.display = "none";
+          document.getElementById("container").style.display = "none";
         } else {
           // If room name is blank, show "No blank name" message
           document.getElementById("noBlankNameText").style.display = "block";
@@ -57,7 +61,7 @@
         var roomName = document.getElementById("roomNameInput").value.trim();
         // Check if the entered room name matches any existing room
         if (rooms.includes(roomName)) {
-          // If room exists, navigate to the room
+          // Clear website screen and go to chat
           document.getElementById("chatPage").style.display = "block";
           document.getElementById("noRoomsText").style.display = "none";
           document.getElementById("container").style.display = "none";
@@ -104,8 +108,8 @@
 
       // Redirect user to chatroom when leaving
       window.onbeforeunload = function() {
-        // Redirect to chatroom when leaving
-        window.location.href = "https://rubixyoutube.github.io/chatroom/";
+        // Show confirmation prompt before leaving chat room
+        return confirm("Are you sure you want to leave?");
       };
     });
   </script>
