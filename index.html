@@ -43,8 +43,6 @@
       document.getElementById("createRoomBtn").addEventListener("click", function() {
         var roomName = document.getElementById("roomNameInput").value.trim();
         if (roomName !== "") {
-          // Redirect to the specified room
-          window.location.href = "https://rubixyoutube.github.io/chatroom/";
         } else {
           // If room name is blank, show "No blank name" message
           document.getElementById("noBlankNameText").style.display = "block";
@@ -104,9 +102,10 @@
         }
       }
 
-      // Redirect user to main page when leaving
+      // Redirect user to chatroom when leaving
       window.onbeforeunload = function() {
-        return "Are you sure you want to leave?";
+        // Redirect to chatroom when leaving
+        window.location.href = "https://rubixyoutube.github.io/chatroom/";
       };
     });
   </script>
