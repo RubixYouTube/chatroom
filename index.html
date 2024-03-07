@@ -85,6 +85,15 @@
         if (message !== "") {
           if (message === "/clear") {
             document.getElementById("chatTextArea").value = "";
+          } else if (message === "/gclear") {
+            var currentTime = new Date().getTime();
+            var lastClearTime = localStorage.getItem("lastClearTime");
+            if (!lastClearTime || currentTime - lastClearTime > 60000) {
+              localStorage.setItem("lastClearTime", currentTime);
+              document.getElementById("chatTextArea").value = "";
+            } else {
+              alert("Global clear is on cooldown. Please wait.");
+            }
           } else {
             var chatTextArea = document.getElementById("chatTextArea");
             chatTextArea.value += "<" + username + ">: " + message + "\n";
@@ -94,6 +103,11 @@
           alert("Please enter a message to send.");
         }
       }
+
+      // Redirect user to main page when leaving
+      window.onbeforeunload = function() {
+        return "Are you sure you want to leave?";
+      };
     });
   </script>
 </body>
