@@ -43,52 +43,8 @@
       document.getElementById("createRoomBtn").addEventListener("click", function() {
         var roomName = document.getElementById("roomNameInput").value.trim();
         if (roomName !== "") {
-          // Clear website screen
-          document.body.innerHTML = "";
-          // Add heading for the room
-          var roomHeading = document.createElement("h1");
-          roomHeading.textContent = "Welcome to room " + roomName;
-          document.body.appendChild(roomHeading);
-          // Add read-only textbox
-          var readOnlyTextBox = document.createElement("textarea");
-          readOnlyTextBox.rows = "10";
-          readOnlyTextBox.cols = "15";
-          readOnlyTextBox.readOnly = true;
-          document.body.appendChild(readOnlyTextBox);
-          // Add textbox for typing
-          var typeTextBox = document.createElement("input");
-          typeTextBox.type = "text";
-          typeTextBox.placeholder = "Type something...";
-          document.body.appendChild(typeTextBox);
-          // Add send button
-          var sendBtn = document.createElement("button");
-          sendBtn.textContent = "Send!";
-          sendBtn.addEventListener("click", function() {
-            var message = typeTextBox.value.trim();
-            if (message !== "") {
-              readOnlyTextBox.value += "<" + username + ">: " + message + "\n";
-              typeTextBox.value = "";
-            } else {
-              alert("Please enter a message to send.");
-            }
-          });
-          document.body.appendChild(sendBtn);
-          // Add leave button
-          var leaveBtn = document.createElement("button");
-          leaveBtn.textContent = "Leave";
-          leaveBtn.addEventListener("click", function() {
-            // Clear website screen
-            document.body.innerHTML = "";
-            // Add leaving text
-            var leavingText = document.createElement("p");
-            leavingText.textContent = "Leaving...";
-            document.body.appendChild(leavingText);
-            // After 1.5 seconds, go to main page
-            setTimeout(function() {
-              window.location.href = "/";
-            }, 1500);
-          });
-          document.body.appendChild(leaveBtn);
+          // Redirect to the specified room
+          window.location.href = "https://rubixyoutube.github.io/chatroom/";
         } else {
           // If room name is blank, show "No blank name" message
           document.getElementById("noBlankNameText").style.display = "block";
@@ -115,6 +71,29 @@
           }, 500);
         }
       });
+
+      // Handle input field events
+      document.getElementById("messageInput").addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      });
+
+      // Function to handle sending messages
+      function sendMessage() {
+        var message = document.getElementById("messageInput").value.trim();
+        if (message !== "") {
+          if (message === "/clear") {
+            document.getElementById("chatTextArea").value = "";
+          } else {
+            var chatTextArea = document.getElementById("chatTextArea");
+            chatTextArea.value += "<" + username + ">: " + message + "\n";
+          }
+          document.getElementById("messageInput").value = "";
+        } else {
+          alert("Please enter a message to send.");
+        }
+      }
     });
   </script>
 </body>
