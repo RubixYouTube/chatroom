@@ -3,61 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat App</title>
+  <title>Main Page</title>
   <style>
-    .container {
+    body {
       text-align: center;
-    }
-
-    #chatPage {
-      text-align: left;
-      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome</h1>
-    <input type="text" id="usernameInput" placeholder="Username">
-    <button id="setUsernameBtn">Set Username</button>
-    <hr>
-    <h2>Rooms: <span id="roomCount">0</span></h2>
-    <p id="roomList">Available Rooms:</p>
-    <p id="userOnlineCount">User Online: <span id="userCount">0</span></p>
-    <input type="text" id="roomNameInput" placeholder="Room Name">
-    <button id="createRoomBtn">Create Room</button>
-    <button id="goBtn">Go!</button>
-    <p id="noRoomsText" style="display: none;">No rooms</p>
-    <p id="invalidRoomText" style="display: none; color: red;">Invalid Room</p>
-    <p id="noBlankNameText" style="display: none; color: red;">No blank name</p>
-  </div>
-
-  <div id="chatPage" style="display: none;">
-    <h2>Users online: <span id="userOnlineCount">(useronline)</span></h2>
-    <textarea id="chatTextArea" readonly rows="10" cols="100"></textarea>
-    <input type="text" id="messageInput" placeholder="send things..">
-    <button id="sendBtn">Send</button>
-    <button id="leaveBtn">Leave</button>
-  </div>
+  <h1>Welcome</h1>
+  <input type="text" id="usernameInput" placeholder="Username">
+  <button id="setUsernameBtn">Set Username</button>
+  <hr>
+  <h2>Rooms: <span id="roomCount">0</span></h2>
+  <p id="roomList">Available Rooms:</p>
+  <p id="userOnlineCount">User Online: <span id="userCount">0</span></p>
+  <input type="text" id="roomNameInput" placeholder="Room Name">
+  <button id="createRoomBtn">Create Room</button>
+  <button id="goBtn">Go!</button>
+  <p id="noRoomsText" style="display: none;">No rooms</p>
+  <p id="invalidRoomText" style="display: none; color: red;">Invalid Room</p>
+  <p id="noBlankNameText" style="display: none; color: red;">No blank name</p>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var username = "";
-      var rooms = []; // Empty array to store room names
-
-      // Set initial room count
-      document.getElementById("roomCount").textContent = rooms.length;
-
-      // Update room list
-      function updateRoomList() {
-        var roomListElement = document.getElementById("roomList");
-        roomListElement.innerHTML = "Available Rooms:";
-        rooms.forEach(function(room) {
-          var roomListItem = document.createElement("p");
-          roomListItem.textContent = room;
-          roomListElement.appendChild(roomListItem);
-        });
-      }
 
       // Set username button click event
       document.getElementById("setUsernameBtn").addEventListener("click", function() {
@@ -73,8 +43,52 @@
       document.getElementById("createRoomBtn").addEventListener("click", function() {
         var roomName = document.getElementById("roomNameInput").value.trim();
         if (roomName !== "") {
-          // Redirect to chat page with room name parameter
-          window.location.href = "chat.html?room=" + roomName;
+          // Clear website screen
+          document.body.innerHTML = "";
+          // Add heading for the room
+          var roomHeading = document.createElement("h1");
+          roomHeading.textContent = "Welcome to room " + roomName;
+          document.body.appendChild(roomHeading);
+          // Add read-only textbox
+          var readOnlyTextBox = document.createElement("textarea");
+          readOnlyTextBox.rows = "10";
+          readOnlyTextBox.cols = "15";
+          readOnlyTextBox.readOnly = true;
+          document.body.appendChild(readOnlyTextBox);
+          // Add textbox for typing
+          var typeTextBox = document.createElement("input");
+          typeTextBox.type = "text";
+          typeTextBox.placeholder = "Type something...";
+          document.body.appendChild(typeTextBox);
+          // Add send button
+          var sendBtn = document.createElement("button");
+          sendBtn.textContent = "Send!";
+          sendBtn.addEventListener("click", function() {
+            var message = typeTextBox.value.trim();
+            if (message !== "") {
+              readOnlyTextBox.value += "<" + username + ">: " + message + "\n";
+              typeTextBox.value = "";
+            } else {
+              alert("Please enter a message to send.");
+            }
+          });
+          document.body.appendChild(sendBtn);
+          // Add leave button
+          var leaveBtn = document.createElement("button");
+          leaveBtn.textContent = "Leave";
+          leaveBtn.addEventListener("click", function() {
+            // Clear website screen
+            document.body.innerHTML = "";
+            // Add leaving text
+            var leavingText = document.createElement("p");
+            leavingText.textContent = "Leaving...";
+            document.body.appendChild(leavingText);
+            // After 1.5 seconds, go to main page
+            setTimeout(function() {
+              window.location.href = "/";
+            }, 1500);
+          });
+          document.body.appendChild(leaveBtn);
         } else {
           // If room name is blank, show "No blank name" message
           document.getElementById("noBlankNameText").style.display = "block";
@@ -100,23 +114,6 @@
             document.getElementById("invalidRoomText").style.display = "none";
           }, 500);
         }
-      });
-
-      // Send button click event
-      document.getElementById("sendBtn").addEventListener("click", function() {
-        var message = document.getElementById("messageInput").value.trim();
-        if (message !== "") {
-          var chatTextArea = document.getElementById("chatTextArea");
-          chatTextArea.value += "<" + username + ">: " + message + "\n";
-          document.getElementById("messageInput").value = "";
-        } else {
-          alert("Please enter a message to send.");
-        }
-      });
-
-      // Leave button click event
-      document.getElementById("leaveBtn").addEventListener("click", function() {
-        window.location.href = "main.html"; // Replace with main page URL
       });
     });
   </script>
