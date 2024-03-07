@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Room</title>
+  <style>
+    body {
+      text-align: center;
+    }
+
+    #leaveBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: orange;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+    }
+
+    #chatContainer {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome again</h1>
+  <p>Users Online: </p>
+  <textarea id="chatTextArea" rows="10" cols="14" readonly></textarea><br>
+  <input type="text" id="messageInput" placeholder="Type your message..">
+  <button id="sendBtn">Send</button>
+  <button id="leaveBtn">Leave</button>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var username = getUsernameFromURL() || "User"; // Default to "User" if no username provided
+
+      // Function to get username from URL parameters
+      function getUsernameFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('username');
+      }
+
+      // Send button click event
+      document.getElementById("sendBtn").addEventListener("click", function() {
+        var message = document.getElementById("messageInput").value.trim();
+        if (message !== "") {
+          var chatTextArea = document.getElementById("chatTextArea");
+          chatTextArea.value += "<" + username + ">: " + message + "\n";
+          document.getElementById("messageInput").value = "";
+        } else {
+          alert("Please enter a message to send.");
+        }
+      });
+
+      // Leave button click event
+      document.getElementById("leaveBtn").addEventListener("click", function() {
+        window.location.href = "/"; // Redirect to main page
+      });
+    });
+  </script>
+</body>
+</html>
